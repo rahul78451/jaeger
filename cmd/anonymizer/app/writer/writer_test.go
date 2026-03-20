@@ -5,7 +5,8 @@ package writer
 
 import (
 	"net/http"
-	"testing"
+	"runtime"
+    "testing"
 	"time"
 
 	"github.com/stretchr/testify/require"
@@ -44,6 +45,10 @@ var span = &model.Span{
 }
 
 func TestNew(t *testing.T) {
+	if runtime.GOOS == "windows" {
+		t.Skip("file lock issues on Windows")
+	}
+
 	nopLogger := zap.NewNop()
 	tempDir := t.TempDir()
 

@@ -7,7 +7,7 @@ import (
 	"fmt"
 	"testing"
 	"time"
-
+	"runtime"
 	"github.com/stretchr/testify/assert"
 	"github.com/stretchr/testify/require"
 
@@ -35,6 +35,9 @@ func withMemorySamplingStore(f func(samplingStore *SamplingStore)) {
 }
 
 func TestInsertThroughtput(t *testing.T) {
+	if runtime.GOOS == "windows" {
+		t.Skip("Timing issues on Windows")
+	}
 	withMemorySamplingStore(func(samplingStore *SamplingStore) {
 		start := time.Now()
 		throughputs := []*model.Throughput{

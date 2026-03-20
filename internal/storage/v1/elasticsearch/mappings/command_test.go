@@ -7,6 +7,7 @@ import (
 	"encoding/json"
 	"errors"
 	"io"
+	"runtime"
 	"os"
 	"testing"
 
@@ -18,6 +19,11 @@ import (
 )
 
 func TestCommandExecute(t *testing.T) {
+	if runtime.GOOS == "windows" {
+		t.Skip("Wildcard * in filenames not supported on Windows")
+	}
+
+
 	cmd := Command()
 
 	// TempFile to capture output
